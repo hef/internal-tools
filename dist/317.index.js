@@ -216,7 +216,7 @@ const errors = [
 function canRetry(err) {
     return errors.some((str) => err.stderr.includes(str));
 }
-async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, }) {
+async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, platforms, }) {
     const args = [
         'buildx',
         'build',
@@ -225,6 +225,9 @@ async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dry
     ];
     if (dist_default().nonEmptyArray(buildArgs)) {
         args.push(...buildArgs.map((b) => `--build-arg=${b}`));
+    }
+    if (dist_default().nonEmptyArray(platforms)) {
+        args.push(...platforms.map((p) => `--platform=${p}`));
     }
     if (dist_default().string(cache)) {
         const cacheImage = `${imagePrefix}/${cache}:${image.replace(/\//g, '-')}`;
@@ -464,7 +467,7 @@ function createTag(tagSuffix, version) {
         ? `${version}-${tagSuffix}`
         : version;
 }
-async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly, cache, dryRun, tagSuffix, versioning, majorMinor, prune, }, versions) {
+async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly, cache, dryRun, tagSuffix, versioning, majorMinor, prune, platforms, }, versions) {
     const builds = [];
     const failed = [];
     const ver = (0,dist_versioning.get)(versioning || 'semver');
@@ -521,6 +524,7 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
                 cacheTags,
                 buildArgs: [...(buildArgs !== null && buildArgs !== void 0 ? buildArgs : []), `${buildArg}=${version}`],
                 dryRun,
+                platforms,
             });
             if (!buildOnly) {
                 await publish({ image, imagePrefix, tag, dryRun });
@@ -591,6 +595,7 @@ async function run() {
         buildOnly: (0,core.getInput)('build-only') == 'true',
         majorMinor: (0,util/* getArg */.a8)('major-minor') !== 'false',
         prune: (0,util/* getArg */.a8)('prune') === 'true',
+        platforms: (0,util/* getArg */.a8)('platforms', { multi: true }),
     };
     if (dryRun) {
         (0,logger/* default */.Z)('GitHub Actions branch detected - Force building latest, no push');
