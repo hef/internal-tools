@@ -229,4 +229,30 @@ describe(getName(__filename), () => {
       expect((e as Error).message).toEqual('missing-config');
     }
   });
+
+  it('works dummyx', async () => {
+    jest.resetAllMocks();
+    utils.readJson.mockResolvedValueOnce(require('./__fixtures__/dummy.json'));
+
+    await run();
+
+    expect(docker.build.mock.calls).toMatchSnapshot('build');
+    expect(docker.publish.mock.calls).toMatchSnapshot('publish');
+  });
+
+  it('multiplatform build-only', async () => {
+    datasources.getPkgReleases.mockResolvedValueOnce({
+      releases: [{ version }, { version: '2.0.0-rc.24' }],
+    });
+
+    args = {
+      ...args,
+      platforms: ['linux/amd64', 'linux/arm64'],
+    };
+
+    await run();
+
+    expect(docker.build.mock.calls).toMatchSnapshot('build');
+    expect(docker.publish.mock.calls).toMatchSnapshot('publish');
+  });
 });
