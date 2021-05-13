@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[` build platforms 1`] = `
+Array [
+  Array [
+    "docker",
+    Array [
+      "buildx",
+      "build",
+      "--load",
+      "--tag=renovate/base:latest",
+      "--platform=linux/arm64",
+      ".",
+    ],
+  ],
+]
+`;
+
 exports[` build retries 1`] = `
 Array [
   Array [

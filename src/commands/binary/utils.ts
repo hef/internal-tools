@@ -58,6 +58,7 @@ export async function createBuilderImage(
   if (is.nonEmptyArray(buildArgs)) {
     args.push(...buildArgs.map((b) => `--build-arg=${b}`));
   }
+
   await dockerBuildx(...args, ws);
 }
 

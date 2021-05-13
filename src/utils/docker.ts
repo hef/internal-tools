@@ -124,6 +124,7 @@ export type BuildOptions = {
   tag?: string;
   dryRun?: boolean;
   buildArgs?: string[];
+  platforms?: string[];
 };
 
 const errors = [
@@ -144,6 +145,7 @@ export async function build({
   tag = 'latest',
   dryRun,
   buildArgs,
+  platforms,
 }: BuildOptions): Promise<void> {
   const args = [
     'buildx',
@@ -154,6 +156,10 @@ export async function build({
 
   if (is.nonEmptyArray(buildArgs)) {
     args.push(...buildArgs.map((b) => `--build-arg=${b}`));
+  }
+
+  if (is.nonEmptyArray(platforms)) {
+    args.push(...platforms.map((p) => `--platform=${p}`));
   }
 
   if (is.string(cache)) {
