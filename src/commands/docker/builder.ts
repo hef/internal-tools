@@ -125,6 +125,7 @@ async function buildAndPush(
     versioning,
     majorMinor,
     prune,
+    platforms,
   }: Config,
   versions: string[]
 ): Promise<void> {
@@ -198,6 +199,7 @@ async function buildAndPush(
         cacheTags,
         buildArgs: [...(buildArgs ?? []), `${buildArg}=${version}`],
         dryRun,
+        platforms,
       });
 
       if (!buildOnly) {
@@ -283,6 +285,7 @@ export async function run(): Promise<void> {
     buildOnly: getInput('build-only') == 'true',
     majorMinor: getArg('major-minor') !== 'false',
     prune: getArg('prune') === 'true',
+    platforms: getArg('platforms', { multi: true }),
   };
 
   if (dryRun) {
