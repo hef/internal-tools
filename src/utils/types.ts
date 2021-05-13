@@ -46,6 +46,7 @@ export type Config = {
   lastOnly: boolean;
   dryRun: boolean;
   prune: boolean;
+  platforms?: string[];
 } & ConfigFile;
 
 export type BinaryBuilderConfig = {
