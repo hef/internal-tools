@@ -549,7 +549,6 @@ async function init() {
 /* harmony export */   "e$": () => (/* binding */ docker),
 /* harmony export */   "Yo": () => (/* binding */ dockerRun),
 /* harmony export */   "WR": () => (/* binding */ dockerBuildx),
-/* harmony export */   "zJ": () => (/* binding */ dockerTag),
 /* harmony export */   "py": () => (/* binding */ dockerPrune),
 /* harmony export */   "xd": () => (/* binding */ dockerDf)
 /* harmony export */ });
@@ -570,13 +569,6 @@ async function dockerRun(...args) {
 }
 async function dockerBuildx(...args) {
     return await docker('buildx', ...args);
-}
-async function dockerTag({ image, imagePrefix, src, tgt, }) {
-    return await (0,_util__WEBPACK_IMPORTED_MODULE_0__/* .exec */ .GL)('docker', [
-        'tag',
-        `${imagePrefix}/${image}:${src}`,
-        `${imagePrefix}/${image}:${tgt}`,
-    ]);
 }
 async function dockerPrune() {
     (0,_logger__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z)('Pruning docker system');
