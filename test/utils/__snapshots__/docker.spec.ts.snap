@@ -24,6 +24,7 @@ Array [
       "buildx",
       "build",
       "--tag=renovate/base:latest",
+      "--output=type=registry",
       "--platform=linux/arm64",
       "--platform=linux/amd64",
       ".",

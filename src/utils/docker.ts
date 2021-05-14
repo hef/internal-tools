@@ -149,7 +149,9 @@ export async function build({
 }: BuildOptions): Promise<void> {
   const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
 
-  if (!platforms || platforms.length <= 1) {
+  if (platforms && platforms.length > 1) {
+    args.push('--output=type=registry');
+  } else {
     args.push('--load');
   }
 
