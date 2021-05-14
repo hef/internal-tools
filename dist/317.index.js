@@ -218,7 +218,10 @@ function canRetry(err) {
 }
 async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, platforms, }) {
     const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
-    if (!platforms || platforms.length <= 1) {
+    if (platforms && platforms.length > 1) {
+        args.push('--output=type=registry');
+    }
+    else {
         args.push('--load');
     }
     if (dist_default().nonEmptyArray(buildArgs)) {
