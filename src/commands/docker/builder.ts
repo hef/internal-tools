@@ -156,6 +156,9 @@ async function buildAndPush(
 
   await exec('df', ['-h']);
 
+  const UseManifestList: boolean =
+    !is.undefined(platforms) && platforms.length > 1;
+
   for (const version of versions) {
     const tag = createTag(tagSuffix, version);
     const imageVersion = `${imagePrefix}/${image}:${tag}`;
@@ -203,13 +206,20 @@ async function buildAndPush(
       });
 
       if (!buildOnly) {
-        await publish({ image, imagePrefix, tag, dryRun });
+        const skipOutOfDateCheck = UseManifestList;
+        await publish({ image, imagePrefix, tag, dryRun, skipOutOfDateCheck });
         const source = tag;
 
         for (const tag of tags) {
           log(`Publish ${source} as ${tag}`);
           await dockerTag({ image, imagePrefix, src: source, tgt: tag });
-          await publish({ image, imagePrefix, tag, dryRun });
+          await publish({
+            image,
+            imagePrefix,
+            tag,
+            dryRun,
+            skipOutOfDateCheck,
+          });
         }
       }
 

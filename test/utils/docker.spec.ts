@@ -292,6 +292,24 @@ describe(getName(__filename), () => {
       expect(nock.isDone()).toBe(true);
     });
 
+    it('works (skip out of date check)', async () => {
+      utils.exec.mockResolvedValueOnce({
+        ...res,
+        stdout: '',
+      });
+
+      await publish({
+        imagePrefix,
+        image,
+        tag,
+        dryRun: true,
+        skipOutOfDateCheck: true,
+      });
+      expect(utils.exec.mock.calls).toMatchSnapshot();
+
+      expect(nock.isDone()).toBe(false);
+    });
+
     it('uptodate', async () => {
       utils.exec.mockResolvedValueOnce({
         ...res,
