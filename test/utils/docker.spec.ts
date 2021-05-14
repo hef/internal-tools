@@ -225,12 +225,25 @@ describe(getName(__filename), () => {
       expect(utils.exec.mock.calls).toMatchSnapshot();
     });
 
-    it('platforms', async () => {
+    it('platform', async () => {
       utils.exec.mockResolvedValueOnce({
         ...res,
       });
 
       await build({ imagePrefix, image, platforms: ['linux/arm64'] });
+      expect(utils.exec.mock.calls).toMatchSnapshot();
+    });
+
+    it('platforms', async () => {
+      utils.exec.mockResolvedValueOnce({
+        ...res,
+      });
+
+      await build({
+        imagePrefix,
+        image,
+        platforms: ['linux/arm64', 'linux/amd64'],
+      });
       expect(utils.exec.mock.calls).toMatchSnapshot();
     });
   });
