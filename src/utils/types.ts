@@ -35,7 +35,7 @@ export type ConfigFile = {
 
 export type Config = {
   buildArg: string;
-  buildArgs?: string[];
+  buildArgs: string[];
   buildOnly: boolean;
   tagSuffix?: string;
   depName: string;
@@ -50,7 +50,7 @@ export type Config = {
 } & ConfigFile;
 
 export type BinaryBuilderConfig = {
-  buildArgs?: string[];
+  buildArgs: string[];
   depName: string;
   ignoredVersions: string[];
   lastOnly: boolean;

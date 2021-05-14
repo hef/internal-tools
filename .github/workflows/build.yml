@@ -160,7 +160,7 @@ jobs:
         uses: ./
         with:
           command: docker-builder
-          image-prefix: containerbase/
+          image-prefix: heff/
           image: node
           config: e2e/node.json
           dry-run: true

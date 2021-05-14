@@ -202,6 +202,22 @@ describe(getName(__filename), () => {
       expect(utils.exec.mock.calls).toMatchSnapshot();
     });
 
+    it('does platform things)', async () => {
+      utils.exec.mockResolvedValueOnce({
+        ...res,
+      });
+
+      await build({
+        imagePrefix,
+        image,
+        cache,
+        cacheTags: ['dummy'],
+        dryRun: true,
+        platform: 'linux/arm64',
+      });
+      expect(utils.exec.mock.calls).toMatchSnapshot();
+    });
+
     it('retries', async () => {
       utils.exec.mockRejectedValueOnce(
         new ExecError(1, 'failed', 'unexpected status: 400 Bad Request', '')
@@ -222,28 +238,6 @@ describe(getName(__filename), () => {
 
       await expect(build({ imagePrefix, image })).rejects.toThrow('failure');
 
-      expect(utils.exec.mock.calls).toMatchSnapshot();
-    });
-
-    it('platform', async () => {
-      utils.exec.mockResolvedValueOnce({
-        ...res,
-      });
-
-      await build({ imagePrefix, image, platforms: ['linux/arm64'] });
-      expect(utils.exec.mock.calls).toMatchSnapshot();
-    });
-
-    it('platforms', async () => {
-      utils.exec.mockResolvedValueOnce({
-        ...res,
-      });
-
-      await build({
-        imagePrefix,
-        image,
-        platforms: ['linux/arm64', 'linux/amd64'],
-      });
       expect(utils.exec.mock.calls).toMatchSnapshot();
     });
   });
@@ -290,24 +284,6 @@ describe(getName(__filename), () => {
       expect(utils.exec.mock.calls).toMatchSnapshot();
 
       expect(nock.isDone()).toBe(true);
-    });
-
-    it('works (skip out of date check)', async () => {
-      utils.exec.mockResolvedValueOnce({
-        ...res,
-        stdout: '',
-      });
-
-      await publish({
-        imagePrefix,
-        image,
-        tag,
-        dryRun: true,
-        skipOutOfDateCheck: true,
-      });
-      expect(utils.exec.mock.calls).toMatchSnapshot();
-
-      expect(nock.isDone()).toBe(false);
     });
 
     it('uptodate', async () => {

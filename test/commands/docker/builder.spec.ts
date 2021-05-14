@@ -200,7 +200,7 @@ describe(getName(__filename), () => {
     try {
       await run();
     } catch (e) {
-      expect((e as Error).message).toEqual('failed');
+      expect((e as Error).message).toEqual('failure');
     }
   });
 
@@ -228,5 +228,15 @@ describe(getName(__filename), () => {
     } catch (e) {
       expect((e as Error).message).toEqual('missing-config');
     }
+  });
+
+  it('works dummyx', async () => {
+    jest.resetAllMocks();
+    utils.readJson.mockResolvedValueOnce(require('./__fixtures__/dummy.json'));
+
+    await run();
+
+    expect(docker.build.mock.calls).toMatchSnapshot('build');
+    expect(docker.publish.mock.calls).toMatchSnapshot('publish');
   });
 });
