@@ -217,12 +217,10 @@ function canRetry(err) {
     return errors.some((str) => err.stderr.includes(str));
 }
 async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, platforms, }) {
-    const args = [
-        'buildx',
-        'build',
-        '--load',
-        `--tag=${imagePrefix}/${image}:${tag}`,
-    ];
+    const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
+    if (!platforms || platforms.length <= 1) {
+        args.push('--load');
+    }
     if (dist_default().nonEmptyArray(buildArgs)) {
         args.push(...buildArgs.map((b) => `--build-arg=${b}`));
     }
