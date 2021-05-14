@@ -159,6 +159,10 @@ Array [
 ]
 `;
 
+exports[` publish works (skip out of date check) 1`] = `Array []`;
+
+exports[` publish works (xdry-run) 1`] = `Array []`;
+
 exports[` publish works 1`] = `
 Array [
   Array [

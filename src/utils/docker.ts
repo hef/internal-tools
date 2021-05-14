@@ -54,6 +54,7 @@ export enum DockerContentType {
   ManifestV1 = 'application/vnd.docker.distribution.manifest.v1+json',
   ManifestV1Signed = 'application/vnd.docker.distribution.manifest.v1+prettyjws',
   ManifestV2 = 'application/vnd.docker.distribution.manifest.v2+json',
+  ManifestListV2 = 'application/vnd.docker.distribution.manifest.list.v2+json',
 }
 
 const shaRe = /(sha256:[a-f0-9]{64})/;
@@ -149,7 +150,7 @@ export async function build({
 }: BuildOptions): Promise<void> {
   const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
 
-  if (platforms && platforms.length > 1) {
+  if (platforms && platforms.length > 1 && !dryRun) {
     args.push('--output=type=registry');
   } else {
     args.push('--load');
@@ -198,34 +199,39 @@ type PublishOptions = {
   imagePrefix: string;
   tag: string;
   dryRun?: boolean;
+  skipOutOfDateCheck?: boolean;
 };
 
 export async function publish({
   image,
   imagePrefix,
   tag,
-  dryRun,
+  dryRun = false,
+  skipOutOfDateCheck = false,
 }: PublishOptions): Promise<void> {
   const imageName = `${imagePrefix}/${image}`;
   const fullName = `${imageName}:${tag}`;
+
   log.info(chalk.blue('Processing image:'), chalk.yellow(fullName));
 
-  log('Fetch new id');
-  const newId = await getLocalImageId(imageName, tag);
+  if (!skipOutOfDateCheck) {
+    log('Fetch new id');
+    const newId = await getLocalImageId(imageName, tag);
 
-  log('Fetch old id');
-  const oldId = await getRemoteImageId(imageName, tag);
+    log('Fetch old id');
+    const oldId = await getRemoteImageId(imageName, tag);
 
-  if (oldId === newId) {
-    log('Image uptodate, no push nessessary:', chalk.yellow(oldId));
-    return;
+    if (oldId === newId) {
+      log('Image uptodate, no push nessessary:', chalk.yellow(oldId));
+      return;
+    }
+    log('Publish new image', `${oldId} => ${newId}`);
   }
 
-  log('Publish new image', `${oldId} => ${newId}`);
   if (dryRun) {
     log.warn(chalk.yellow('[DRY_RUN]'), chalk.blue('Would push:'), fullName);
   } else {
     await docker('push', fullName);
   }
-  log.info(chalk.blue('Processing image finished:', newId));
+  log.info(chalk.blue('Processing image finished:', fullName));
 }
