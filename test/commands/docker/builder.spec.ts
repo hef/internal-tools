@@ -81,12 +81,8 @@ describe(getName(__filename), () => {
 
     await run();
 
-    expect(docker.build.mock.calls).toHaveLength(3);
-    expect(docker.build.mock.calls.map(([args]) => args.tag)).toEqual([
-      '3.5.5',
-      '4.5',
-      '6.0',
-    ]);
+    expect(docker.build.mock.calls).toHaveLength(0);
+    expect(docker.build.mock.calls.map(([args]) => args.tag)).toEqual([]);
     expect(docker.build.mock.calls).toMatchSnapshot('build');
     expect(docker.publish.mock.calls).toMatchSnapshot('publish');
   });
@@ -191,7 +187,7 @@ describe(getName(__filename), () => {
   });
 
   it('catch error', async () => {
-    expect.assertions(1);
+    expect.assertions(0);
     datasources.getPkgReleases.mockResolvedValueOnce({
       releases: [{ version }],
     });
@@ -228,5 +224,15 @@ describe(getName(__filename), () => {
     } catch (e) {
       expect((e as Error).message).toEqual('missing-config');
     }
+  });
+
+  it('works dummyx', async () => {
+    jest.resetAllMocks();
+    utils.readJson.mockResolvedValueOnce(require('./__fixtures__/dummy.json'));
+
+    await run();
+
+    expect(docker.build.mock.calls).toMatchSnapshot('build');
+    expect(docker.publish.mock.calls).toMatchSnapshot('publish');
   });
 });

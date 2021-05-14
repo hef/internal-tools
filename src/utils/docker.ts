@@ -54,7 +54,6 @@ export enum DockerContentType {
   ManifestV1 = 'application/vnd.docker.distribution.manifest.v1+json',
   ManifestV1Signed = 'application/vnd.docker.distribution.manifest.v1+prettyjws',
   ManifestV2 = 'application/vnd.docker.distribution.manifest.v2+json',
-  ManifestListV2 = 'application/vnd.docker.distribution.manifest.list.v2+json',
 }
 
 const shaRe = /(sha256:[a-f0-9]{64})/;
@@ -125,7 +124,7 @@ export type BuildOptions = {
   tag?: string;
   dryRun?: boolean;
   buildArgs?: string[];
-  platforms?: string[];
+  platform?: string;
 };
 
 const errors = [
@@ -146,22 +145,21 @@ export async function build({
   tag = 'latest',
   dryRun,
   buildArgs,
-  platforms,
+  platform,
 }: BuildOptions): Promise<void> {
-  const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
-
-  if (platforms && platforms.length > 1 && !dryRun) {
-    args.push('--output=type=registry');
-  } else {
-    args.push('--load');
-  }
+  const args = [
+    'buildx',
+    'build',
+    '--load',
+    `--tag=${imagePrefix}/${image}:${tag}`,
+  ];
 
   if (is.nonEmptyArray(buildArgs)) {
     args.push(...buildArgs.map((b) => `--build-arg=${b}`));
   }
 
-  if (is.nonEmptyArray(platforms)) {
-    args.push(...platforms.map((p) => `--platform=${p}`));
+  if (is.string(platform)) {
+    args.push(`--platform=${platform}`);
   }
 
   if (is.string(cache)) {
@@ -199,39 +197,34 @@ type PublishOptions = {
   imagePrefix: string;
   tag: string;
   dryRun?: boolean;
-  skipOutOfDateCheck?: boolean;
 };
 
 export async function publish({
   image,
   imagePrefix,
   tag,
-  dryRun = false,
-  skipOutOfDateCheck = false,
+  dryRun,
 }: PublishOptions): Promise<void> {
   const imageName = `${imagePrefix}/${image}`;
   const fullName = `${imageName}:${tag}`;
-
   log.info(chalk.blue('Processing image:'), chalk.yellow(fullName));
 
-  if (!skipOutOfDateCheck) {
-    log('Fetch new id');
-    const newId = await getLocalImageId(imageName, tag);
+  log('Fetch new id');
+  const newId = await getLocalImageId(imageName, tag);
 
-    log('Fetch old id');
-    const oldId = await getRemoteImageId(imageName, tag);
+  log('Fetch old id');
+  const oldId = await getRemoteImageId(imageName, tag);
 
-    if (oldId === newId) {
-      log('Image uptodate, no push nessessary:', chalk.yellow(oldId));
-      return;
-    }
-    log('Publish new image', `${oldId} => ${newId}`);
+  if (oldId === newId) {
+    log('Image uptodate, no push nessessary:', chalk.yellow(oldId));
+    return;
   }
 
+  log('Publish new image', `${oldId} => ${newId}`);
   if (dryRun) {
     log.warn(chalk.yellow('[DRY_RUN]'), chalk.blue('Would push:'), fullName);
   } else {
     await docker('push', fullName);
   }
-  log.info(chalk.blue('Processing image finished:', fullName));
+  log.info(chalk.blue('Processing image finished:', newId));
 }

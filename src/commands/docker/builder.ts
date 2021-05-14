@@ -5,9 +5,9 @@ import { ReleaseResult, getPkgReleases } from 'renovate/dist/datasource';
 import { get as getVersioning } from 'renovate/dist/versioning';
 import { exec, getArg, isDryRun, readJson } from '../../util';
 import { readDockerConfig } from '../../utils/config';
-import { build, publish } from '../../utils/docker';
+import { build, getLocalImageId } from '../../utils/docker';
 import { init } from '../../utils/docker/buildx';
-import { dockerDf, dockerPrune, dockerTag } from '../../utils/docker/common';
+import { docker, dockerDf, dockerPrune } from '../../utils/docker/common';
 import log from '../../utils/logger';
 import * as renovate from '../../utils/renovate';
 import { Config, ConfigFile } from '../../utils/types';
@@ -130,7 +130,6 @@ async function buildAndPush(
   versions: string[]
 ): Promise<void> {
   const builds: string[] = [];
-  const failed: string[] = [];
   const ver = getVersioning(versioning || 'semver');
   const versionsMap = new Map<string, string>();
   if (majorMinor) {
@@ -156,14 +155,11 @@ async function buildAndPush(
 
   await exec('df', ['-h']);
 
-  const UseManifestList: boolean =
-    !is.undefined(platforms) && platforms.length > 1;
-
   for (const version of versions) {
     const tag = createTag(tagSuffix, version);
     const imageVersion = `${imagePrefix}/${image}:${tag}`;
     log(`Building ${imageVersion}`);
-    try {
+    {
       const minor = ver.getMinor(version);
       const major = ver.getMajor(version);
       const cacheTags: string[] = [tagSuffix ?? 'latest'];
@@ -194,40 +190,58 @@ async function buildAndPush(
         tags.push(tagSuffix ?? 'latest');
       }
 
-      await build({
-        image,
-        imagePrefix,
-        tag,
-        cache,
-        cacheTags,
-        buildArgs: [...(buildArgs ?? []), `${buildArg}=${version}`],
-        dryRun,
-        platforms,
-      });
+      const ids: string[] = [];
+      for (const platform of platforms ?? ['linux/amd64']) {
+        await build({
+          image,
+          imagePrefix,
+          tag,
+          cache,
+          cacheTags,
+          buildArgs: [...(buildArgs ?? []), `${buildArg}=${version}`],
+          dryRun,
+          platform,
+        });
 
-      if (!buildOnly) {
-        const skipOutOfDateCheck = UseManifestList;
-        await publish({ image, imagePrefix, tag, dryRun, skipOutOfDateCheck });
-        const source = tag;
+        const imageName = `${imagePrefix}/${image}`;
+        const id = await getLocalImageId(imageName, tag);
+        ids.push(id);
+      }
 
+      await docker(
+        'manifest',
+        'create',
+        `${imagePrefix}/${image}:${tag}`,
+        ...ids
+      );
+      for (const tag of tags) {
+        await docker(
+          'manifest',
+          'create',
+          `${imagePrefix}/${image}:${tag}`,
+          ...ids
+        );
+      }
+
+      if (!buildOnly && !dryRun) {
+        await docker(
+          'manifest',
+          'push',
+          `${imagePrefix}/${image}:${tag}`,
+          ...ids
+        );
         for (const tag of tags) {
-          log(`Publish ${source} as ${tag}`);
-          await dockerTag({ image, imagePrefix, src: source, tgt: tag });
-          await publish({
-            image,
-            imagePrefix,
-            tag,
-            dryRun,
-            skipOutOfDateCheck,
-          });
+          await docker(
+            'manifest',
+            'push',
+            `${imagePrefix}/${image}:${tag}`,
+            ...ids
+          );
         }
       }
 
       log(`Build ${imageVersion}`);
       builds.push(version);
-    } catch (err) {
-      log.error(err);
-      failed.push(version);
     }
 
     await dockerDf();
@@ -241,11 +255,6 @@ async function buildAndPush(
 
   if (builds.length) {
     log('Build list:' + builds.join(' '));
-  }
-
-  if (failed.length) {
-    log.warn('Failed list:' + failed.join(' '));
-    throw new Error('failed');
   }
 }
 

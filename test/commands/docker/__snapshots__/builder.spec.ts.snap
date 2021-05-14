@@ -1,138 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`build-only yarn: build 1`] = `
-Array [
-  Array [
-    Object {
-      "buildArgs": Array [
-        "YARN_VERSION=1.22.4",
-      ],
-      "cache": "docker-build-cache",
-      "cacheTags": Array [
-        "latest",
-        "1",
-        "1.22",
-      ],
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "1.22.4",
-    },
-  ],
-]
-`;
+exports[`build-only yarn: build 1`] = `Array []`;
 
 exports[`build-only yarn: publish 1`] = `Array []`;
 
-exports[`last-only dummy: build 1`] = `
-Array [
-  Array [
-    Object {
-      "buildArgs": Array [
-        "IMAGE=slim",
-        "DUMMY_VERSION=12",
-      ],
-      "cache": undefined,
-      "cacheTags": Array [
-        "slim",
-      ],
-      "dryRun": undefined,
-      "image": "dummy",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "12-slim",
-    },
-  ],
-]
-`;
+exports[`last-only dummy: build 1`] = `Array []`;
 
-exports[`last-only dummy: publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "dummy",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "12-slim",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "dummy",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "slim",
-    },
-  ],
-]
-`;
+exports[`last-only dummy: publish 1`] = `Array []`;
 
-exports[`updates image yarn (dry-run): build 1`] = `
-Array [
-  Array [
-    Object {
-      "buildArgs": Array [
-        "YARN_VERSION=1.22.4",
-      ],
-      "cache": "docker-build-cache",
-      "cacheTags": Array [
-        "latest",
-        "1",
-        "1.22",
-      ],
-      "dryRun": true,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "1.22.4",
-    },
-  ],
-]
-`;
+exports[`updates image yarn (dry-run): build 1`] = `Array []`;
 
-exports[`updates image yarn (dry-run): publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": true,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "1.22.4",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": true,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "1",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": true,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "1.22",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": true,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "latest",
-    },
-  ],
-]
-`;
+exports[`updates image yarn (dry-run): publish 1`] = `Array []`;
 
 exports[`works dummy: build 1`] = `
 Array [
@@ -148,7 +26,7 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platforms": undefined,
+      "platform": "linux/amd64",
       "tag": "10",
     },
   ],
@@ -164,234 +42,61 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platforms": undefined,
+      "platform": "linux/amd64",
       "tag": "13",
     },
   ],
 ]
 `;
 
-exports[`works dummy: publish 1`] = `
+exports[`works dummy: publish 1`] = `Array []`;
+
+exports[`works dummyx: build 1`] = `
 Array [
   Array [
     Object {
+      "buildArgs": Array [
+        "DUMMY_VERSION=10",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "latest",
+      ],
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
+      "platform": "linux/amd64",
       "tag": "10",
     },
   ],
   Array [
     Object {
+      "buildArgs": Array [
+        "DUMMY_VERSION=13",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "latest",
+      ],
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
+      "platform": "linux/amd64",
       "tag": "13",
     },
   ],
 ]
 `;
 
-exports[`works gradle: build 1`] = `
-Array [
-  Array [
-    Object {
-      "buildArgs": Array [
-        "GRADLE_VERSION=3.5.5",
-      ],
-      "cache": undefined,
-      "cacheTags": Array [
-        "latest",
-        "3",
-        "3.5",
-      ],
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "3.5.5",
-    },
-  ],
-  Array [
-    Object {
-      "buildArgs": Array [
-        "GRADLE_VERSION=4.5",
-      ],
-      "cache": undefined,
-      "cacheTags": Array [
-        "latest",
-        "4",
-      ],
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "4.5",
-    },
-  ],
-  Array [
-    Object {
-      "buildArgs": Array [
-        "GRADLE_VERSION=6.0",
-      ],
-      "cache": undefined,
-      "cacheTags": Array [
-        "latest",
-        "6",
-      ],
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "6.0",
-    },
-  ],
-]
-`;
+exports[`works dummyx: publish 1`] = `Array []`;
 
-exports[`works gradle: publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "3.5.5",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "3",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "3.5",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "4.5",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "4",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "6.0",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "6",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "gradle",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "latest",
-    },
-  ],
-]
-`;
+exports[`works gradle: build 1`] = `Array []`;
 
-exports[`works pnpm: build 1`] = `
-Array [
-  Array [
-    Object {
-      "buildArgs": Array [
-        "IMAGE=slim",
-        "PNPM_VERSION=5.0.0",
-      ],
-      "cache": undefined,
-      "cacheTags": Array [
-        "slim",
-        "5-slim",
-        "5.0-slim",
-      ],
-      "dryRun": undefined,
-      "image": "pnpm",
-      "imagePrefix": "ghcr.io/renovatebot",
-      "platforms": Array [],
-      "tag": "5.0.0-slim",
-    },
-  ],
-]
-`;
+exports[`works gradle: publish 1`] = `Array []`;
 
-exports[`works pnpm: publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "pnpm",
-      "imagePrefix": "ghcr.io/renovatebot",
-      "skipOutOfDateCheck": false,
-      "tag": "5.0.0-slim",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "pnpm",
-      "imagePrefix": "ghcr.io/renovatebot",
-      "skipOutOfDateCheck": false,
-      "tag": "5-slim",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "pnpm",
-      "imagePrefix": "ghcr.io/renovatebot",
-      "skipOutOfDateCheck": false,
-      "tag": "5.0-slim",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "pnpm",
-      "imagePrefix": "ghcr.io/renovatebot",
-      "skipOutOfDateCheck": false,
-      "tag": "slim",
-    },
-  ],
-]
-`;
+exports[`works pnpm: build 1`] = `Array []`;
+
+exports[`works pnpm: publish 1`] = `Array []`;
 
 exports[`works ubuntu: build 1`] = `
 Array [
@@ -409,7 +114,7 @@ Array [
       "dryRun": undefined,
       "image": "ubuntu",
       "imagePrefix": "renovate",
-      "platforms": undefined,
+      "platform": "linux/amd64",
       "tag": "bionic",
     },
   ],
@@ -427,141 +132,15 @@ Array [
       "dryRun": undefined,
       "image": "ubuntu",
       "imagePrefix": "renovate",
-      "platforms": undefined,
+      "platform": "linux/amd64",
       "tag": "focal",
     },
   ],
 ]
 `;
 
-exports[`works ubuntu: publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "bionic",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "18",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "18.4",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "focal",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "20",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "20.4",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "ubuntu",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "latest",
-    },
-  ],
-]
-`;
+exports[`works ubuntu: publish 1`] = `Array []`;
 
-exports[`works yarn: build 1`] = `
-Array [
-  Array [
-    Object {
-      "buildArgs": Array [
-        "YARN_VERSION=1.22.4",
-      ],
-      "cache": "docker-build-cache",
-      "cacheTags": Array [
-        "latest",
-        "1",
-        "1.22",
-      ],
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "platforms": Array [],
-      "tag": "1.22.4",
-    },
-  ],
-]
-`;
+exports[`works yarn: build 1`] = `Array []`;
 
-exports[`works yarn: publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "1.22.4",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "1",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "1.22",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "skipOutOfDateCheck": false,
-      "tag": "latest",
-    },
-  ],
-]
-`;
+exports[`works yarn: publish 1`] = `Array []`;

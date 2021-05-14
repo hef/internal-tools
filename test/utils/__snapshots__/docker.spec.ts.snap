@@ -1,32 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` build platform 1`] = `
+exports[` build does platform things) 1`] = `
 Array [
   Array [
     "docker",
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
-      "--platform=linux/arm64",
-      ".",
-    ],
-  ],
-]
-`;
-
-exports[` build platforms 1`] = `
-Array [
-  Array [
-    "docker",
-    Array [
-      "buildx",
-      "build",
       "--tag=renovate/base:latest",
-      "--output=type=registry",
       "--platform=linux/arm64",
-      "--platform=linux/amd64",
+      "--cache-from=renovate/docker-build-cache:base-latest",
+      "--cache-from=renovate/docker-build-cache:base-dummy",
       ".",
     ],
   ],
@@ -40,8 +25,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       ".",
     ],
   ],
@@ -50,8 +35,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       ".",
     ],
   ],
@@ -65,8 +50,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       ".",
     ],
   ],
@@ -75,8 +60,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       ".",
     ],
   ],
@@ -90,8 +75,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       "--build-arg=IMAGE=slim",
       "--cache-from=renovate/docker-build-cache:base-latest",
       "--cache-from=renovate/docker-build-cache:base-dummy",
@@ -108,8 +93,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       "--cache-from=renovate/docker-build-cache:base-latest",
       "--cache-to=type=registry,ref=renovate/docker-build-cache:base-latest,mode=max",
       ".",
@@ -125,8 +110,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--tag=renovate/base:latest",
       "--load",
+      "--tag=renovate/base:latest",
       ".",
     ],
   ],
@@ -158,8 +143,6 @@ Array [
   ],
 ]
 `;
-
-exports[` publish works (skip out of date check) 1`] = `Array []`;
 
 exports[` publish works 1`] = `
 Array [
