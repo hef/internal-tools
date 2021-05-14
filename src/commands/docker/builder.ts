@@ -194,7 +194,7 @@ async function buildAndPush(
       if (is.emptyArray(platforms) || is.nullOrUndefined(platforms)) {
         platforms = ['linux/amd64'];
       }
-      for (const platform of platforms!) {
+      for (const platform of platforms) {
         await build({
           image,
           imagePrefix,
