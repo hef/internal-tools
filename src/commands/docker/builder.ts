@@ -211,22 +211,21 @@ async function buildAndPush(
         ids.push(id);
       }
 
-      await docker(
-        'manifest',
-        'create',
-        `${imagePrefix}/${image}:${tag}`,
-        ...ids
-      );
-      for (const tag of tags) {
+      if (!buildOnly && !dryRun) {
         await docker(
           'manifest',
           'create',
           `${imagePrefix}/${image}:${tag}`,
           ...ids
         );
-      }
-
-      if (!buildOnly && !dryRun) {
+        for (const tag of tags) {
+          await docker(
+            'manifest',
+            'create',
+            `${imagePrefix}/${image}:${tag}`,
+            ...ids
+          );
+        }
         await docker(
           'manifest',
           'push',
