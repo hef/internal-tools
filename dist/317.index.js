@@ -166,6 +166,7 @@ var DockerContentType;
     DockerContentType["ManifestV1"] = "application/vnd.docker.distribution.manifest.v1+json";
     DockerContentType["ManifestV1Signed"] = "application/vnd.docker.distribution.manifest.v1+prettyjws";
     DockerContentType["ManifestV2"] = "application/vnd.docker.distribution.manifest.v2+json";
+    DockerContentType["ManifestListV2"] = "application/vnd.docker.distribution.manifest.list.v2+json";
 })(DockerContentType || (DockerContentType = {}));
 const shaRe = /(sha256:[a-f0-9]{64})/;
 async function getRemoteImageId(repository, tag = 'latest') {
@@ -218,7 +219,7 @@ function canRetry(err) {
 }
 async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, platforms, }) {
     const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
-    if (platforms && platforms.length > 1) {
+    if (platforms && platforms.length > 1 && !dryRun) {
         args.push('--output=type=registry');
     }
     else {
@@ -257,26 +258,28 @@ async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dry
         }
     }
 }
-async function publish({ image, imagePrefix, tag, dryRun, }) {
+async function publish({ image, imagePrefix, tag, dryRun = false, skipOutOfDateCheck = false, }) {
     const imageName = `${imagePrefix}/${image}`;
     const fullName = `${imageName}:${tag}`;
     logger/* default.info */.Z.info(source_default().blue('Processing image:'), source_default().yellow(fullName));
-    (0,logger/* default */.Z)('Fetch new id');
-    const newId = await getLocalImageId(imageName, tag);
-    (0,logger/* default */.Z)('Fetch old id');
-    const oldId = await getRemoteImageId(imageName, tag);
-    if (oldId === newId) {
-        (0,logger/* default */.Z)('Image uptodate, no push nessessary:', source_default().yellow(oldId));
-        return;
+    if (!skipOutOfDateCheck) {
+        (0,logger/* default */.Z)('Fetch new id');
+        const newId = await getLocalImageId(imageName, tag);
+        (0,logger/* default */.Z)('Fetch old id');
+        const oldId = await getRemoteImageId(imageName, tag);
+        if (oldId === newId) {
+            (0,logger/* default */.Z)('Image uptodate, no push nessessary:', source_default().yellow(oldId));
+            return;
+        }
+        (0,logger/* default */.Z)('Publish new image', `${oldId} => ${newId}`);
     }
-    (0,logger/* default */.Z)('Publish new image', `${oldId} => ${newId}`);
     if (dryRun) {
         logger/* default.warn */.Z.warn(source_default().yellow('[DRY_RUN]'), source_default().blue('Would push:'), fullName);
     }
     else {
         await (0,common/* docker */.e$)('push', fullName);
     }
-    logger/* default.info */.Z.info(source_default().blue('Processing image finished:', newId));
+    logger/* default.info */.Z.info(source_default().blue('Processing image finished:', fullName));
 }
 
 // EXTERNAL MODULE: ./utils/docker/buildx.ts
@@ -490,6 +493,7 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
         }
     }
     await (0,util/* exec */.GL)('df', ['-h']);
+    const UseManifestList = !dist_default().undefined(platforms) && platforms.length > 1;
     for (const version of versions) {
         const tag = createTag(tagSuffix, version);
         const imageVersion = `${imagePrefix}/${image}:${tag}`;
@@ -528,12 +532,19 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
                 platforms,
             });
             if (!buildOnly) {
-                await publish({ image, imagePrefix, tag, dryRun });
+                const skipOutOfDateCheck = UseManifestList;
+                await publish({ image, imagePrefix, tag, dryRun, skipOutOfDateCheck });
                 const source = tag;
                 for (const tag of tags) {
                     (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
                     await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
-                    await publish({ image, imagePrefix, tag, dryRun });
+                    await publish({
+                        image,
+                        imagePrefix,
+                        tag,
+                        dryRun,
+                        skipOutOfDateCheck,
+                    });
                 }
             }
             (0,logger/* default */.Z)(`Build ${imageVersion}`);
