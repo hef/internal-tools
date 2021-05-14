@@ -191,7 +191,10 @@ async function buildAndPush(
       }
 
       const ids: string[] = [];
-      for (const platform of platforms ?? ['linux/amd64']) {
+      if (is.emptyArray(platforms) || is.nullOrUndefined(platforms)) {
+        platforms = ['linux/amd64'];
+      }
+      for (const platform of platforms!) {
         await build({
           image,
           imagePrefix,
@@ -253,9 +256,7 @@ async function buildAndPush(
     }
   }
 
-  if (builds.length) {
-    log('Build list:' + builds.join(' '));
-  }
+  log('Build list:' + builds.join(' '));
 }
 
 async function generateImages(config: Config): Promise<void> {

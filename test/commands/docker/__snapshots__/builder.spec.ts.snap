@@ -1,14 +1,76 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`build-only yarn: build 1`] = `Array []`;
+exports[`build-only yarn: build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "YARN_VERSION=1.22.4",
+      ],
+      "cache": "docker-build-cache",
+      "cacheTags": Array [
+        "latest",
+        "1",
+        "1.22",
+      ],
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "1.22.4",
+    },
+  ],
+]
+`;
 
 exports[`build-only yarn: publish 1`] = `Array []`;
 
-exports[`last-only dummy: build 1`] = `Array []`;
+exports[`last-only dummy: build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "IMAGE=slim",
+        "DUMMY_VERSION=12",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "slim",
+      ],
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "12-slim",
+    },
+  ],
+]
+`;
 
 exports[`last-only dummy: publish 1`] = `Array []`;
 
-exports[`updates image yarn (dry-run): build 1`] = `Array []`;
+exports[`updates image yarn (dry-run): build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "YARN_VERSION=1.22.4",
+      ],
+      "cache": "docker-build-cache",
+      "cacheTags": Array [
+        "latest",
+        "1",
+        "1.22",
+      ],
+      "dryRun": true,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "1.22.4",
+    },
+  ],
+]
+`;
 
 exports[`updates image yarn (dry-run): publish 1`] = `Array []`;
 
@@ -90,11 +152,88 @@ Array [
 
 exports[`works dummyx: publish 1`] = `Array []`;
 
-exports[`works gradle: build 1`] = `Array []`;
+exports[`works gradle: build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "GRADLE_VERSION=3.5.5",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "latest",
+        "3",
+        "3.5",
+      ],
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "3.5.5",
+    },
+  ],
+  Array [
+    Object {
+      "buildArgs": Array [
+        "GRADLE_VERSION=4.5",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "latest",
+        "4",
+      ],
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "4.5",
+    },
+  ],
+  Array [
+    Object {
+      "buildArgs": Array [
+        "GRADLE_VERSION=6.0",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "latest",
+        "6",
+      ],
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "6.0",
+    },
+  ],
+]
+`;
 
 exports[`works gradle: publish 1`] = `Array []`;
 
-exports[`works pnpm: build 1`] = `Array []`;
+exports[`works pnpm: build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "IMAGE=slim",
+        "PNPM_VERSION=5.0.0",
+      ],
+      "cache": undefined,
+      "cacheTags": Array [
+        "slim",
+        "5-slim",
+        "5.0-slim",
+      ],
+      "dryRun": undefined,
+      "image": "pnpm",
+      "imagePrefix": "ghcr.io/renovatebot",
+      "platform": "linux/amd64",
+      "tag": "5.0.0-slim",
+    },
+  ],
+]
+`;
 
 exports[`works pnpm: publish 1`] = `Array []`;
 
@@ -141,6 +280,27 @@ Array [
 
 exports[`works ubuntu: publish 1`] = `Array []`;
 
-exports[`works yarn: build 1`] = `Array []`;
+exports[`works yarn: build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "YARN_VERSION=1.22.4",
+      ],
+      "cache": "docker-build-cache",
+      "cacheTags": Array [
+        "latest",
+        "1",
+        "1.22",
+      ],
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "platform": "linux/amd64",
+      "tag": "1.22.4",
+    },
+  ],
+]
+`;
 
 exports[`works yarn: publish 1`] = `Array []`;
