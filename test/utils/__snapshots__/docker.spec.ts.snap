@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[` build platform 1`] = `
+Array [
+  Array [
+    "docker",
+    Array [
+      "buildx",
+      "build",
+      "--tag=renovate/base:latest",
+      "--load",
+      "--platform=linux/arm64",
+      ".",
+    ],
+  ],
+]
+`;
+
 exports[` build platforms 1`] = `
 Array [
   Array [
@@ -7,9 +23,9 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
       "--platform=linux/arm64",
+      "--platform=linux/amd64",
       ".",
     ],
   ],
@@ -23,8 +39,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       ".",
     ],
   ],
@@ -33,8 +49,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       ".",
     ],
   ],
@@ -48,8 +64,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       ".",
     ],
   ],
@@ -58,8 +74,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       ".",
     ],
   ],
@@ -73,8 +89,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       "--build-arg=IMAGE=slim",
       "--cache-from=renovate/docker-build-cache:base-latest",
       "--cache-from=renovate/docker-build-cache:base-dummy",
@@ -91,8 +107,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       "--cache-from=renovate/docker-build-cache:base-latest",
       "--cache-to=type=registry,ref=renovate/docker-build-cache:base-latest,mode=max",
       ".",
@@ -108,8 +124,8 @@ Array [
     Array [
       "buildx",
       "build",
-      "--load",
       "--tag=renovate/base:latest",
+      "--load",
       ".",
     ],
   ],

@@ -147,12 +147,11 @@ export async function build({
   buildArgs,
   platforms,
 }: BuildOptions): Promise<void> {
-  const args = [
-    'buildx',
-    'build',
-    '--load',
-    `--tag=${imagePrefix}/${image}:${tag}`,
-  ];
+  const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
+
+  if (!platforms || platforms.length <= 1) {
+    args.push('--load');
+  }
 
   if (is.nonEmptyArray(buildArgs)) {
     args.push(...buildArgs.map((b) => `--build-arg=${b}`));
