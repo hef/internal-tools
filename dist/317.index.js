@@ -114,8 +114,12 @@ var utils_config = __webpack_require__(21490);
 // EXTERNAL MODULE: ../node_modules/delay/index.js
 var delay = __webpack_require__(97390);
 var delay_default = /*#__PURE__*/__webpack_require__.n(delay);
+// EXTERNAL MODULE: ../node_modules/got/dist/source/index.js
+var dist_source = __webpack_require__(4932);
+var dist_source_default = /*#__PURE__*/__webpack_require__.n(dist_source);
 // EXTERNAL MODULE: ../node_modules/www-authenticate/index.js
 var www_authenticate = __webpack_require__(51318);
+var www_authenticate_default = /*#__PURE__*/__webpack_require__.n(www_authenticate);
 // EXTERNAL MODULE: ./utils/docker/common.ts
 var common = __webpack_require__(43673);
 // EXTERNAL MODULE: ./utils/logger.ts + 2 modules
@@ -135,13 +139,13 @@ const registry = 'https://index.docker.io';
 async function getAuthHeaders(registry, repository) {
     try {
         const apiCheckUrl = `${registry}/v2/`;
-        const apiCheckResponse = await got(apiCheckUrl, { throwHttpErrors: false });
+        const apiCheckResponse = await dist_source_default()(apiCheckUrl, { throwHttpErrors: false });
         if (apiCheckResponse.headers['www-authenticate'] === undefined) {
             return {};
         }
-        const authenticateHeader = new wwwAuthenticate.parsers.WWW_Authenticate(apiCheckResponse.headers['www-authenticate']);
+        const authenticateHeader = new (www_authenticate_default()).parsers.WWW_Authenticate(apiCheckResponse.headers['www-authenticate']);
         const authUrl = `${authenticateHeader.parms.realm}?service=${authenticateHeader.parms.service}&scope=repository:${repository}:pull`;
-        const authResponse = (await got(authUrl, {
+        const authResponse = (await dist_source_default()(authUrl, {
             responseType: 'json',
         })).body;
         const token = authResponse.token || authResponse.access_token;
@@ -153,7 +157,7 @@ async function getAuthHeaders(registry, repository) {
         };
     }
     catch (err) {
-        log.error(chalk.red('auth error'), err.message);
+        logger/* default.error */.Z.error(source_default().red('auth error'), err.message);
         throw new Error('Failed to obtain docker registry token');
     }
 }
@@ -169,7 +173,7 @@ async function getRemoteImageId(repository, tag = 'latest') {
     headers.accept = DockerContentType.ManifestV2;
     const url = `${registry}/v2/${repository}/manifests/${tag}`;
     try {
-        const resp = await got(url, {
+        const resp = await dist_source_default()(url, {
             headers,
             responseType: 'json',
         });
@@ -179,18 +183,18 @@ async function getRemoteImageId(repository, tag = 'latest') {
             case DockerContentType.ManifestV1:
             case DockerContentType.ManifestV1Signed:
                 // something wrong, we need to overwrite existing
-                log.warn(chalk.yellow('Wrong response'), `Wrong response: ${resp.headers['content-type']}`);
+                logger/* default.warn */.Z.warn(source_default().yellow('Wrong response'), `Wrong response: ${resp.headers['content-type']}`);
                 return '<error>';
             default:
                 throw new Error(`Unsupported response: ${resp.headers['content-type']}`);
         }
     }
     catch (e) {
-        if (e instanceof HTTPError && e.response.statusCode === 404) {
+        if (e instanceof dist_source.HTTPError && e.response.statusCode === 404) {
             // no image published yet
             return '<none>';
         }
-        log.error(chalk.red('request error'), e.message);
+        logger/* default.error */.Z.error(source_default().red('request error'), e.message);
         throw new Error('Could not find remote image id');
     }
 }
@@ -212,18 +216,20 @@ const errors = [
 function canRetry(err) {
     return errors.some((str) => err.stderr.includes(str));
 }
-async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, platform, }) {
-    const args = [
-        'buildx',
-        'build',
-        '--load',
-        `--tag=${imagePrefix}/${image}:${tag}`,
-    ];
+async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dryRun, buildArgs, platforms, }) {
+    const MultiPlatform = !dist_default().nullOrUndefined(platforms) && platforms.length > 1;
+    const args = ['buildx', 'build', `--tag=${imagePrefix}/${image}:${tag}`];
+    if (!MultiPlatform) {
+        args.push('--load');
+    }
+    else if (!dryRun) {
+        args.push('--push');
+    }
     if (dist_default().nonEmptyArray(buildArgs)) {
         args.push(...buildArgs.map((b) => `--build-arg=${b}`));
     }
-    if (dist_default().string(platform)) {
-        args.push(`--platform=${platform}`);
+    if (dist_default().array(platforms)) {
+        args.push(...platforms.map((p) => `--platform=${p}`));
     }
     if (dist_default().string(cache)) {
         const cacheImage = `${imagePrefix}/${cache}:${image.replace(/\//g, '-')}`;
@@ -255,23 +261,23 @@ async function build({ image, imagePrefix, cache, cacheTags, tag = 'latest', dry
 async function publish({ image, imagePrefix, tag, dryRun, }) {
     const imageName = `${imagePrefix}/${image}`;
     const fullName = `${imageName}:${tag}`;
-    log.info(chalk.blue('Processing image:'), chalk.yellow(fullName));
-    log('Fetch new id');
+    logger/* default.info */.Z.info(source_default().blue('Processing image:'), source_default().yellow(fullName));
+    (0,logger/* default */.Z)('Fetch new id');
     const newId = await getLocalImageId(imageName, tag);
-    log('Fetch old id');
+    (0,logger/* default */.Z)('Fetch old id');
     const oldId = await getRemoteImageId(imageName, tag);
     if (oldId === newId) {
-        log('Image uptodate, no push nessessary:', chalk.yellow(oldId));
+        (0,logger/* default */.Z)('Image uptodate, no push nessessary:', source_default().yellow(oldId));
         return;
     }
-    log('Publish new image', `${oldId} => ${newId}`);
+    (0,logger/* default */.Z)('Publish new image', `${oldId} => ${newId}`);
     if (dryRun) {
-        log.warn(chalk.yellow('[DRY_RUN]'), chalk.blue('Would push:'), fullName);
+        logger/* default.warn */.Z.warn(source_default().yellow('[DRY_RUN]'), source_default().blue('Would push:'), fullName);
     }
     else {
-        await docker('push', fullName);
+        await (0,common/* docker */.e$)('push', fullName);
     }
-    log.info(chalk.blue('Processing image finished:', newId));
+    logger/* default.info */.Z.info(source_default().blue('Processing image finished:', newId));
 }
 
 // EXTERNAL MODULE: ./utils/docker/buildx.ts
@@ -465,6 +471,7 @@ function createTag(tagSuffix, version) {
 }
 async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly, cache, dryRun, tagSuffix, versioning, majorMinor, prune, platforms, }, versions) {
     const builds = [];
+    const failed = [];
     const ver = (0,dist_versioning.get)(versioning || 'semver');
     const versionsMap = new Map();
     if (majorMinor) {
@@ -488,7 +495,7 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
         const tag = createTag(tagSuffix, version);
         const imageVersion = `${imagePrefix}/${image}:${tag}`;
         (0,logger/* default */.Z)(`Building ${imageVersion}`);
-        {
+        try {
             const minor = ver.getMinor(version);
             const major = ver.getMajor(version);
             const cacheTags = [tagSuffix !== null && tagSuffix !== void 0 ? tagSuffix : 'latest'];
@@ -511,37 +518,41 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
             if (version === latestStable) {
                 tags.push(tagSuffix !== null && tagSuffix !== void 0 ? tagSuffix : 'latest');
             }
-            const ids = [];
-            if (dist_default().emptyArray(platforms) || dist_default().nullOrUndefined(platforms)) {
-                platforms = ['linux/amd64'];
-            }
-            for (const platform of platforms) {
-                await build({
-                    image,
-                    imagePrefix,
-                    tag,
-                    cache,
-                    cacheTags,
-                    buildArgs: [...(buildArgs !== null && buildArgs !== void 0 ? buildArgs : []), `${buildArg}=${version}`],
-                    dryRun,
-                    platform,
-                });
-                const imageName = `${imagePrefix}/${image}`;
-                const id = await getLocalImageId(imageName, tag);
-                ids.push(id);
-            }
-            if (!buildOnly && !dryRun) {
-                await (0,common/* docker */.e$)('manifest', 'create', `${imagePrefix}/${image}:${tag}`, ...ids);
-                for (const tag of tags) {
-                    await (0,common/* docker */.e$)('manifest', 'create', `${imagePrefix}/${image}:${tag}`, ...ids);
+            await build({
+                image,
+                imagePrefix,
+                tag,
+                cache,
+                cacheTags,
+                buildArgs: [...(buildArgs !== null && buildArgs !== void 0 ? buildArgs : []), `${buildArg}=${version}`],
+                dryRun,
+                platforms,
+            });
+            const MultiPlatform = !dist_default().nullOrUndefined(platforms) && platforms.length > 1;
+            if (!buildOnly) {
+                if (MultiPlatform) {
+                    await publish({ image, imagePrefix, tag, dryRun });
+                    const source = tag;
+                    for (const tag of tags) {
+                        (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
+                        await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
+                        await publish({ image, imagePrefix, tag, dryRun });
+                    }
                 }
-                await (0,common/* docker */.e$)('manifest', 'push', `${imagePrefix}/${image}:${tag}`, ...ids);
-                for (const tag of tags) {
-                    await (0,common/* docker */.e$)('manifest', 'push', `${imagePrefix}/${image}:${tag}`, ...ids);
+                else {
+                    const source = tag;
+                    for (const tag of tags) {
+                        (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
+                        await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
+                    }
                 }
             }
             (0,logger/* default */.Z)(`Build ${imageVersion}`);
             builds.push(version);
+        }
+        catch (err) {
+            logger/* default.error */.Z.error(err);
+            failed.push(version);
         }
         await (0,common/* dockerDf */.xd)();
         await (0,util/* exec */.GL)('df', ['-h']);
@@ -550,7 +561,13 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
             await (0,util/* exec */.GL)('df', ['-h']);
         }
     }
-    (0,logger/* default */.Z)('Build list:' + builds.join(' '));
+    if (builds.length) {
+        (0,logger/* default */.Z)('Build list:' + builds.join(' '));
+    }
+    if (failed.length) {
+        logger/* default.warn */.Z.warn('Failed list:' + failed.join(' '));
+        throw new Error('failed');
+    }
 }
 async function generateImages(config) {
     const buildList = await getBuildList(config);
@@ -815,6 +832,7 @@ async function init() {
 /* harmony export */   "e$": () => (/* binding */ docker),
 /* harmony export */   "Yo": () => (/* binding */ dockerRun),
 /* harmony export */   "WR": () => (/* binding */ dockerBuildx),
+/* harmony export */   "zJ": () => (/* binding */ dockerTag),
 /* harmony export */   "py": () => (/* binding */ dockerPrune),
 /* harmony export */   "xd": () => (/* binding */ dockerDf)
 /* harmony export */ });
@@ -835,6 +853,13 @@ async function dockerRun(...args) {
 }
 async function dockerBuildx(...args) {
     return await docker('buildx', ...args);
+}
+async function dockerTag({ image, imagePrefix, src, tgt, }) {
+    return await (0,_util__WEBPACK_IMPORTED_MODULE_0__/* .exec */ .GL)('docker', [
+        'tag',
+        `${imagePrefix}/${image}:${src}`,
+        `${imagePrefix}/${image}:${tgt}`,
+    ]);
 }
 async function dockerPrune() {
     (0,_logger__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z)('Pruning docker system');
