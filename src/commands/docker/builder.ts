@@ -5,9 +5,9 @@ import { ReleaseResult, getPkgReleases } from 'renovate/dist/datasource';
 import { get as getVersioning } from 'renovate/dist/versioning';
 import { exec, getArg, isDryRun, readJson } from '../../util';
 import { readDockerConfig } from '../../utils/config';
-import { build, getLocalImageId } from '../../utils/docker';
+import { build, publish } from '../../utils/docker';
 import { init } from '../../utils/docker/buildx';
-import { docker, dockerDf, dockerPrune } from '../../utils/docker/common';
+import { dockerDf, dockerPrune, dockerTag } from '../../utils/docker/common';
 import log from '../../utils/logger';
 import * as renovate from '../../utils/renovate';
 import { Config, ConfigFile } from '../../utils/types';
@@ -130,6 +130,7 @@ async function buildAndPush(
   versions: string[]
 ): Promise<void> {
   const builds: string[] = [];
+  const failed: string[] = [];
   const ver = getVersioning(versioning || 'semver');
   const versionsMap = new Map<string, string>();
   if (majorMinor) {
@@ -159,7 +160,7 @@ async function buildAndPush(
     const tag = createTag(tagSuffix, version);
     const imageVersion = `${imagePrefix}/${image}:${tag}`;
     log(`Building ${imageVersion}`);
-    {
+    try {
       const minor = ver.getMinor(version);
       const major = ver.getMajor(version);
       const cacheTags: string[] = [tagSuffix ?? 'latest'];
@@ -190,60 +191,44 @@ async function buildAndPush(
         tags.push(tagSuffix ?? 'latest');
       }
 
-      const ids: string[] = [];
-      if (is.emptyArray(platforms) || is.nullOrUndefined(platforms)) {
-        platforms = ['linux/amd64'];
-      }
-      for (const platform of platforms) {
-        await build({
-          image,
-          imagePrefix,
-          tag,
-          cache,
-          cacheTags,
-          buildArgs: [...(buildArgs ?? []), `${buildArg}=${version}`],
-          dryRun,
-          platform,
-        });
+      await build({
+        image,
+        imagePrefix,
+        tag,
+        cache,
+        cacheTags,
+        buildArgs: [...(buildArgs ?? []), `${buildArg}=${version}`],
+        dryRun,
+        platforms,
+      });
 
-        const imageName = `${imagePrefix}/${image}`;
-        const id = await getLocalImageId(imageName, tag);
-        ids.push(id);
-      }
+      const MultiPlatform: boolean =
+        !is.nullOrUndefined(platforms) && platforms.length > 1;
 
-      if (!buildOnly && !dryRun) {
-        await docker(
-          'manifest',
-          'create',
-          `${imagePrefix}/${image}:${tag}`,
-          ...ids
-        );
-        for (const tag of tags) {
-          await docker(
-            'manifest',
-            'create',
-            `${imagePrefix}/${image}:${tag}`,
-            ...ids
-          );
-        }
-        await docker(
-          'manifest',
-          'push',
-          `${imagePrefix}/${image}:${tag}`,
-          ...ids
-        );
-        for (const tag of tags) {
-          await docker(
-            'manifest',
-            'push',
-            `${imagePrefix}/${image}:${tag}`,
-            ...ids
-          );
+      if (!buildOnly) {
+        if (MultiPlatform) {
+          await publish({ image, imagePrefix, tag, dryRun });
+          const source = tag;
+
+          for (const tag of tags) {
+            log(`Publish ${source} as ${tag}`);
+            await dockerTag({ image, imagePrefix, src: source, tgt: tag });
+            await publish({ image, imagePrefix, tag, dryRun });
+          }
+        } else {
+          const source = tag;
+          for (const tag of tags) {
+            log(`Publish ${source} as ${tag}`);
+            await dockerTag({ image, imagePrefix, src: source, tgt: tag });
+          }
         }
       }
 
       log(`Build ${imageVersion}`);
       builds.push(version);
+    } catch (err) {
+      log.error(err);
+      failed.push(version);
     }
 
     await dockerDf();
@@ -255,7 +240,14 @@ async function buildAndPush(
     }
   }
 
-  log('Build list:' + builds.join(' '));
+  if (builds.length) {
+    log('Build list:' + builds.join(' '));
+  }
+
+  if (failed.length) {
+    log.warn('Failed list:' + failed.join(' '));
+    throw new Error('failed');
+  }
 }
 
 async function generateImages(config: Config): Promise<void> {

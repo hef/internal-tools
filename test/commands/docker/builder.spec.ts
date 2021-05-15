@@ -200,7 +200,7 @@ describe(getName(__filename), () => {
     try {
       await run();
     } catch (e) {
-      expect((e as Error).message).toEqual('failure');
+      expect((e as Error).message).toEqual('failed');
     }
   });
 
@@ -233,6 +233,22 @@ describe(getName(__filename), () => {
   it('works dummyx', async () => {
     jest.resetAllMocks();
     utils.readJson.mockResolvedValueOnce(require('./__fixtures__/dummy.json'));
+
+    await run();
+
+    expect(docker.build.mock.calls).toMatchSnapshot('build');
+    expect(docker.publish.mock.calls).toMatchSnapshot('publish');
+  });
+
+  it('multiplatform build-only', async () => {
+    datasources.getPkgReleases.mockResolvedValueOnce({
+      releases: [{ version }, { version: '2.0.0-rc.24' }],
+    });
+
+    args = {
+      ...args,
+      platforms: ['linux/amd64', 'linux/arm64'],
+    };
 
     await run();
 

@@ -202,6 +202,35 @@ describe(getName(__filename), () => {
       expect(utils.exec.mock.calls).toMatchSnapshot();
     });
 
+    it('multiplatform', async () => {
+      utils.exec.mockResolvedValueOnce({
+        ...res,
+      });
+
+      await build({
+        imagePrefix,
+        image,
+        cache,
+        platforms: ['linux/amd64', 'linux/arm64'],
+      });
+      expect(utils.exec.mock.calls).toMatchSnapshot();
+    });
+
+    it('multiplatform (dry-run)', async () => {
+      utils.exec.mockResolvedValueOnce({
+        ...res,
+      });
+
+      await build({
+        imagePrefix,
+        image,
+        cache,
+        dryRun: true,
+        platforms: ['linux/amd64', 'linux/arm64'],
+      });
+      expect(utils.exec.mock.calls).toMatchSnapshot();
+    });
+
     it('does platform things)', async () => {
       utils.exec.mockResolvedValueOnce({
         ...res,
@@ -213,7 +242,7 @@ describe(getName(__filename), () => {
         cache,
         cacheTags: ['dummy'],
         dryRun: true,
-        platform: 'linux/arm64',
+        platforms: ['linux/arm64'],
       });
       expect(utils.exec.mock.calls).toMatchSnapshot();
     });
