@@ -534,7 +534,7 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
                     const source = tag;
                     for (const tag of tags) {
                         (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
-                        await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
+                        await (0,common/* docker */.e$)('buildx', 'imagetools', 'create', '-t', `${imagePrefix}/${image}:${tag}`, `${imagePrefix}/${image}:${source}`);
                     }
                 }
                 else {

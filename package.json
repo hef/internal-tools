@@ -1,6 +1,6 @@
 {
   "name": "internal-tools",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "private": true,
   "license": "AGPL-3.0",
   "repository": "https://github.com/hef/internal-tools.git",
