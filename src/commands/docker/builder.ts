@@ -7,7 +7,12 @@ import { exec, getArg, isDryRun, readJson } from '../../util';
 import { readDockerConfig } from '../../utils/config';
 import { build, publish } from '../../utils/docker';
 import { init } from '../../utils/docker/buildx';
-import { dockerDf, dockerPrune, dockerTag } from '../../utils/docker/common';
+import {
+  docker,
+  dockerDf,
+  dockerPrune,
+  dockerTag,
+} from '../../utils/docker/common';
 import log from '../../utils/logger';
 import * as renovate from '../../utils/renovate';
 import { Config, ConfigFile } from '../../utils/types';
@@ -210,7 +215,14 @@ async function buildAndPush(
           const source = tag;
           for (const tag of tags) {
             log(`Publish ${source} as ${tag}`);
-            await dockerTag({ image, imagePrefix, src: source, tgt: tag });
+            await docker(
+              'buildx',
+              'imagetools',
+              'create',
+              '-t',
+              `${imagePrefix}/${image}:${tag}`,
+              `${imagePrefix}/${image}:${source}`
+            );
           }
         } else {
           await publish({ image, imagePrefix, tag, dryRun });
