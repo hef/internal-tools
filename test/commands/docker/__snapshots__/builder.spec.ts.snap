@@ -47,7 +47,26 @@ Array [
 ]
 `;
 
-exports[`last-only dummy: publish 1`] = `Array []`;
+exports[`last-only dummy: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "tag": "12-slim",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "tag": "slim",
+    },
+  ],
+]
+`;
 
 exports[`multiplatform build-only: build 1`] = `
 Array [
@@ -75,42 +94,7 @@ Array [
 ]
 `;
 
-exports[`multiplatform build-only: publish 1`] = `
-Array [
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "tag": "1.22.4",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "tag": "1",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "tag": "1.22",
-    },
-  ],
-  Array [
-    Object {
-      "dryRun": undefined,
-      "image": "yarn",
-      "imagePrefix": "renovate",
-      "tag": "latest",
-    },
-  ],
-]
-`;
+exports[`multiplatform build-only: publish 1`] = `Array []`;
 
 exports[`updates image yarn (dry-run): build 1`] = `
 Array [
@@ -135,7 +119,42 @@ Array [
 ]
 `;
 
-exports[`updates image yarn (dry-run): publish 1`] = `Array []`;
+exports[`updates image yarn (dry-run): publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": true,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1.22.4",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": true,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": true,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1.22",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": true,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "latest",
+    },
+  ],
+]
+`;
 
 exports[`works dummy: build 1`] = `
 Array [
@@ -174,7 +193,26 @@ Array [
 ]
 `;
 
-exports[`works dummy: publish 1`] = `Array []`;
+exports[`works dummy: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "tag": "10",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "tag": "13",
+    },
+  ],
+]
+`;
 
 exports[`works dummyx: build 1`] = `
 Array [
@@ -213,7 +251,26 @@ Array [
 ]
 `;
 
-exports[`works dummyx: publish 1`] = `Array []`;
+exports[`works dummyx: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "tag": "10",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "dummy",
+      "imagePrefix": "renovate",
+      "tag": "13",
+    },
+  ],
+]
+`;
 
 exports[`works gradle: build 1`] = `
 Array [
@@ -272,7 +329,74 @@ Array [
 ]
 `;
 
-exports[`works gradle: publish 1`] = `Array []`;
+exports[`works gradle: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "3.5.5",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "3",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "3.5",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "4.5",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "4",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "6.0",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "6",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "gradle",
+      "imagePrefix": "renovate",
+      "tag": "latest",
+    },
+  ],
+]
+`;
 
 exports[`works pnpm: build 1`] = `
 Array [
@@ -298,7 +422,42 @@ Array [
 ]
 `;
 
-exports[`works pnpm: publish 1`] = `Array []`;
+exports[`works pnpm: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "pnpm",
+      "imagePrefix": "ghcr.io/renovatebot",
+      "tag": "5.0.0-slim",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "pnpm",
+      "imagePrefix": "ghcr.io/renovatebot",
+      "tag": "5-slim",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "pnpm",
+      "imagePrefix": "ghcr.io/renovatebot",
+      "tag": "5.0-slim",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "pnpm",
+      "imagePrefix": "ghcr.io/renovatebot",
+      "tag": "slim",
+    },
+  ],
+]
+`;
 
 exports[`works ubuntu: build 1`] = `
 Array [
@@ -341,7 +500,66 @@ Array [
 ]
 `;
 
-exports[`works ubuntu: publish 1`] = `Array []`;
+exports[`works ubuntu: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "bionic",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "18",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "18.4",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "focal",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "20",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "20.4",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "ubuntu",
+      "imagePrefix": "renovate",
+      "tag": "latest",
+    },
+  ],
+]
+`;
 
 exports[`works yarn: build 1`] = `
 Array [
@@ -366,4 +584,39 @@ Array [
 ]
 `;
 
-exports[`works yarn: publish 1`] = `Array []`;
+exports[`works yarn: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1.22.4",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1.22",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "latest",
+    },
+  ],
+]
+`;
