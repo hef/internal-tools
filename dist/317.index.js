@@ -531,19 +531,19 @@ async function buildAndPush({ imagePrefix, image, buildArg, buildArgs, buildOnly
             const MultiPlatform = !dist_default().nullOrUndefined(platforms) && platforms.length > 1;
             if (!buildOnly) {
                 if (MultiPlatform) {
+                    const source = tag;
+                    for (const tag of tags) {
+                        (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
+                        await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
+                    }
+                }
+                else {
                     await publish({ image, imagePrefix, tag, dryRun });
                     const source = tag;
                     for (const tag of tags) {
                         (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
                         await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
                         await publish({ image, imagePrefix, tag, dryRun });
-                    }
-                }
-                else {
-                    const source = tag;
-                    for (const tag of tags) {
-                        (0,logger/* default */.Z)(`Publish ${source} as ${tag}`);
-                        await (0,common/* dockerTag */.zJ)({ image, imagePrefix, src: source, tgt: tag });
                     }
                 }
             }
