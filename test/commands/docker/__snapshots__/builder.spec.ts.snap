@@ -16,7 +16,7 @@ Array [
       "dryRun": undefined,
       "image": "yarn",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "1.22.4",
     },
   ],
@@ -40,7 +40,7 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "12-slim",
     },
   ],
@@ -48,6 +48,69 @@ Array [
 `;
 
 exports[`last-only dummy: publish 1`] = `Array []`;
+
+exports[`multiplatform build-only: build 1`] = `
+Array [
+  Array [
+    Object {
+      "buildArgs": Array [
+        "YARN_VERSION=1.22.4",
+      ],
+      "cache": "docker-build-cache",
+      "cacheTags": Array [
+        "latest",
+        "1",
+        "1.22",
+      ],
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "platforms": Array [
+        "linux/amd64",
+        "linux/arm64",
+      ],
+      "tag": "1.22.4",
+    },
+  ],
+]
+`;
+
+exports[`multiplatform build-only: publish 1`] = `
+Array [
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1.22.4",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "1.22",
+    },
+  ],
+  Array [
+    Object {
+      "dryRun": undefined,
+      "image": "yarn",
+      "imagePrefix": "renovate",
+      "tag": "latest",
+    },
+  ],
+]
+`;
 
 exports[`updates image yarn (dry-run): build 1`] = `
 Array [
@@ -65,7 +128,7 @@ Array [
       "dryRun": true,
       "image": "yarn",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "1.22.4",
     },
   ],
@@ -88,7 +151,7 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": undefined,
       "tag": "10",
     },
   ],
@@ -104,7 +167,7 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": undefined,
       "tag": "13",
     },
   ],
@@ -127,7 +190,7 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": undefined,
       "tag": "10",
     },
   ],
@@ -143,7 +206,7 @@ Array [
       "dryRun": undefined,
       "image": "dummy",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": undefined,
       "tag": "13",
     },
   ],
@@ -168,7 +231,7 @@ Array [
       "dryRun": undefined,
       "image": "gradle",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "3.5.5",
     },
   ],
@@ -185,7 +248,7 @@ Array [
       "dryRun": undefined,
       "image": "gradle",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "4.5",
     },
   ],
@@ -202,7 +265,7 @@ Array [
       "dryRun": undefined,
       "image": "gradle",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "6.0",
     },
   ],
@@ -228,7 +291,7 @@ Array [
       "dryRun": undefined,
       "image": "pnpm",
       "imagePrefix": "ghcr.io/renovatebot",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "5.0.0-slim",
     },
   ],
@@ -253,7 +316,7 @@ Array [
       "dryRun": undefined,
       "image": "ubuntu",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": undefined,
       "tag": "bionic",
     },
   ],
@@ -271,7 +334,7 @@ Array [
       "dryRun": undefined,
       "image": "ubuntu",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": undefined,
       "tag": "focal",
     },
   ],
@@ -296,7 +359,7 @@ Array [
       "dryRun": undefined,
       "image": "yarn",
       "imagePrefix": "renovate",
-      "platform": "linux/amd64",
+      "platforms": Array [],
       "tag": "1.22.4",
     },
   ],
