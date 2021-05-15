@@ -207,6 +207,12 @@ async function buildAndPush(
 
       if (!buildOnly) {
         if (MultiPlatform) {
+          const source = tag;
+          for (const tag of tags) {
+            log(`Publish ${source} as ${tag}`);
+            await dockerTag({ image, imagePrefix, src: source, tgt: tag });
+          }
+        } else {
           await publish({ image, imagePrefix, tag, dryRun });
           const source = tag;
 
@@ -214,12 +220,6 @@ async function buildAndPush(
             log(`Publish ${source} as ${tag}`);
             await dockerTag({ image, imagePrefix, src: source, tgt: tag });
             await publish({ image, imagePrefix, tag, dryRun });
-          }
-        } else {
-          const source = tag;
-          for (const tag of tags) {
-            log(`Publish ${source} as ${tag}`);
-            await dockerTag({ image, imagePrefix, src: source, tgt: tag });
           }
         }
       }
